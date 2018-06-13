@@ -73,11 +73,55 @@ public class JobData {
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
-
             String aValue = row.get(column);
 
             if (aValue.contains(value)) {
                 jobs.add(row);
+            }
+        }
+
+        return jobs;
+    }
+
+    public static boolean dupeCheck(HashMap<String, String> value, ArrayList<HashMap<String, String>> currList)
+    {
+        boolean foundDupe = false ;
+
+        for(HashMap<String, String> row : currList)
+        {
+            if(row.equals(value))
+            {
+                foundDupe = true ;
+            }
+        }
+
+        return foundDupe ;
+    }
+
+    public static ArrayList<HashMap<String,String>> findByValue(String value)
+    {
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>() ;
+
+        for(HashMap<String, String> row : allJobs)
+        {
+
+            /*if(row.containsValue(value))
+            {
+                jobs.add(row) ;
+            }*/
+            for(String aValue : row.values())
+            {
+                String[] arr = aValue.split(" ") ;
+
+                for(int i = 0 ; i < arr.length ; i++)
+                {
+                    if(arr[i].equalsIgnoreCase(value) && dupeCheck(row, jobs) == false)
+                    {
+                        jobs.add(row) ;
+                    }
+                }
             }
         }
 

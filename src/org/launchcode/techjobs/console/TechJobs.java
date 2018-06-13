@@ -1,8 +1,7 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.sql.SQLOutput;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -33,7 +32,8 @@ public class TechJobs {
 
             String actionChoice = getUserSelection("View jobs by:", actionChoices);
 
-            if (actionChoice.equals("list")) {
+            if (actionChoice.equals("list"))
+            {
 
                 String columnChoice = getUserSelection("List", columnChoices);
 
@@ -51,7 +51,8 @@ public class TechJobs {
                     }
                 }
 
-            } else { // choice is "search"
+            }
+            else { // choice is "search"
 
                 // How does the user want to search (e.g. by skill or employer)
                 String searchField = getUserSelection("Search by:", columnChoices);
@@ -61,7 +62,8 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    //System.out.println("Search all fields not yet implemented.");
+                    printJobs(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -109,8 +111,44 @@ public class TechJobs {
     }
 
     // Print a list of jobs
-    private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
+    private static void printJobs(ArrayList<HashMap<String, String>> someJobs)
+    {
+        if(someJobs.isEmpty())
+        {
+            System.out.println("No jobs found!") ;
+            return ;
+        }
+        ArrayList<HashMap<String, String>> copy = new ArrayList<>() ;
 
-        System.out.println("printJobs is not implemented yet");
+        /*for(HashMap<String, String> job : someJobs)
+        {
+            copy.add(job) ;
+        }
+
+        for(HashMap<String, String> job : someJobs)
+        {
+            for(String name : job.keySet())
+            {
+                String key = name.toString() ;
+                Collections.sort(copy, new MapCompare(key));
+            }
+        }*/
+        Collections.sort(someJobs, new MapCompare("position type"));
+
+        for(HashMap<String,String> job : someJobs)
+        {
+            System.out.println("*****\n") ;
+
+            for(String name : job.keySet())
+            {
+                String key = name.toString() ;
+                String value = job.get(name).toString() ;
+
+                System.out.println(key + ": " + value) ;
+            }
+
+            System.out.println("\n*****") ;
+        }
+
     }
 }
